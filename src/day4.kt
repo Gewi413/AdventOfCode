@@ -9,7 +9,7 @@ fun main() {
     println(filtered.size)
 
     var valid = 0
-    pass@for (pass in filtered)  {
+    pass@ for (pass in filtered) {
         for (field in pass.split(" ")) {
             val (key, value) = field.split(":")
             if (!when (key) {
@@ -29,4 +29,30 @@ fun main() {
         valid++
     }
     println(valid)
+}
+
+fun regex() {
+    val input = File("challenges/day4").readText()
+    val patternA = Regex(
+        "(?=(.|\\n(?!\\n))*byr:)" +
+                "(?=(.|\\n(?!\\n))*iyr:)" +
+                "(?=(.|\\n(?!\\n))*eyr:)" +
+                "(?=(.|\\n(?!\\n))*hgt:)" +
+                "(?=(.|\\n(?!\\n))*hcl:)" +
+                "(?=(.|\\n(?!\\n))*ecl:)" +
+                "(?=(.|\\n(?!\\n))*pid:)" +
+                "(.|\\n(?!\\n))*"
+    )
+    val patternB = Regex(
+        "(?=(.|\\n(?!\\n))*byr:(200[0-2]|19[2-9]\\d))" +
+                "(?=(.|\\n(?!\\n))*iyr:(20(20|1\\d)))" +
+                "(?=(.|\\n(?!\\n))*eyr:(20(30|2\\d)))" +
+                "(?=(.|\\n(?!\\n))*hgt:((59|6\\d|7[0-6])in|(1[5-8]\\d|19[0-3])cm))" +
+                "(?=(.|\\n(?!\\n))*hcl:#[a-f0-9]{6})" +
+                "(?=(.|\\n(?!\\n))*ecl:(amb|blu|brn|gry|grn|hzl|oth))" +
+                "(?=(.|\\n(?!\\n))*pid:\\d{9}\\D)" +
+                "(.|\\n(?!\\n))*"
+    )
+    println(patternA.findAll(input).count())
+    println(patternB.findAll(input).count())
 }

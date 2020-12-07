@@ -1,10 +1,14 @@
+@file:Suppress("PackageDirectoryMismatch")
+
+package day2
+
 import java.io.File
 
 fun main() {
     var first = 0
     var second = 0
     val input = File("challenges/day2").readLines()
-    for(line in input) {
+    for (line in input) {
         val password = line.split(" ")[2]
         val char = line.split(" ")[1][0]
         val (lower, upper) = line.split(" ")[0].split("-").map { it.toInt() }

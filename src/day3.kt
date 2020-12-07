@@ -1,3 +1,7 @@
+@file:Suppress("PackageDirectoryMismatch")
+
+package day3
+
 import java.io.File
 
 fun main() {

@@ -1,3 +1,7 @@
+@file:Suppress("PackageDirectoryMismatch")
+
+package day5
+
 import java.io.File
 import kotlin.math.pow
 

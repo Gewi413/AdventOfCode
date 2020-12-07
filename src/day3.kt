@@ -4,17 +4,16 @@ fun main() {
     val input = File("challenges/day3").readLines()
     val length = input[0].length
 
-    fun traverse(dir: Pair<Int, Int>): Int {
+    val directions = listOf(Pair(3, 1), Pair(1, 1), Pair(5, 1), Pair(7, 1), Pair(1, 2)).map {
         var x = 0
         var trees = 0
-        for (y in input.indices step dir.second) {
+        for (y in input.indices step it.second) {
             if (input[y][x] == '#') trees++
-            x = (x + dir.first) % length
+            x = (x + it.first) % length
         }
-        return trees
+        trees
     }
-    println(traverse(Pair(3, 1)))
 
-    val options = listOf(Pair(1, 1), Pair(3, 1), Pair(5, 1), Pair(7, 1), Pair(1, 2))
-    println(options.map { traverse(it).toLong() }.reduce { acc, i -> acc * i })
+    println(directions.first())
+    println(directions.map { it.toLong() }.reduce { acc, i -> acc * i })
 }

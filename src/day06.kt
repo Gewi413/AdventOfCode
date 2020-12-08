@@ -1,6 +1,6 @@
 @file:Suppress("PackageDirectoryMismatch")
 
-package day6
+package day06
 
 import java.io.File
 

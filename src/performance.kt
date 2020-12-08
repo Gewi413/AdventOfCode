@@ -1,17 +1,28 @@
 import java.io.PrintStream
 import kotlin.system.measureNanoTime
-import day1.main as day1
-import day2.main as day2
-import day3.main as day3
-import day4.main as day4
-import day5.main as day5
-import day6.main as day6
-import day7.main as day7
-import day8.main as day8
+import day01.main as day01
+import day02.main as day02
+import day03.main as day03
+import day04.main as day04
+import day05.main as day05
+import day06.main as day06
+import day07.main as day07
+import day08.main as day08
+import day09.main as day09
 
 fun main() {
-    val days = listOf(::day1, ::day2, ::day3, ::day4, ::day5, ::day6, ::day7, ::day8)
+    val days = listOf(
+        ::day01, ::day02, ::day03, ::day04, ::day05, ::day06,
+        ::day07, ::day08, ::day09
+    )
     System.setOut(PrintStream("/dev/null"))
-    for ((i, solution) in days.withIndex())
-        System.err.println("day $i: " + measureNanoTime { solution() } / 1000000 + "ms")
+    var sum = 0L
+    for ((i, solution) in days.withIndex()) {
+        val time = measureNanoTime { solution() }
+        sum += time
+        System.err.println("day $i:\t${time / 1000000}ms")
+    }
+    System.err.println("=============")
+    System.err.println("sum:\t${sum / 1000000}ms")
+
 }

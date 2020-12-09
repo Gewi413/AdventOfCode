@@ -1,10 +1,10 @@
 # Advent of Code 2020
 
-![](https://img.shields.io/badge/Language-Kotlin-orange) ![](https://img.shields.io/badge/days%20completed-8-green) ![](https://img.shields.io/badge/stars%20⭐-16-yellow)
+![](https://img.shields.io/badge/Language-Kotlin-orange) ![](https://img.shields.io/badge/days%20completed-9-green) ![](https://img.shields.io/badge/stars%20⭐-18-yellow)
 
-My personal solutions to the coding advent calender [Advent of Code](https://adventofcode.com/).
+My personal solutions to the coding advent calendar [Advent of Code](https://adventofcode.com/).
 
-Input files aren't on GitHub and in the .gitignore, but can be added in the challenges folder using the `dayN` format where N is the day of the input
+Input files aren't on GitHub and in the .gitignore, but can be added in the challenges' folder using the `dayN` format where N is the day of the input
 
 ### Check out other solutions
 

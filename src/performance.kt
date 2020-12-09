@@ -20,7 +20,7 @@ fun main() {
     for ((i, solution) in days.withIndex()) {
         val time = measureNanoTime { solution() }
         sum += time
-        System.err.println("day $i:\t${time / 1000000}ms")
+        System.err.println("day ${i + 1}:\t${time / 1000000}ms")
     }
     System.err.println("=============")
     System.err.println("sum:\t${sum / 1000000}ms")

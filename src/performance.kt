@@ -1,3 +1,4 @@
+import java.io.OutputStream
 import java.io.PrintStream
 import kotlin.system.measureNanoTime
 import day01.main as day01
@@ -15,7 +16,7 @@ fun main() {
         ::day01, ::day02, ::day03, ::day04, ::day05, ::day06,
         ::day07, ::day08, ::day09
     )
-    System.setOut(PrintStream("/dev/null"))
+    System.setOut(PrintStream(OutputStream.nullOutputStream()))
     var sum = 0L
     for ((i, solution) in days.withIndex()) {
         val time = measureNanoTime { solution() }
@@ -24,5 +25,4 @@ fun main() {
     }
     System.err.println("=============")
     System.err.println("sum:\t${sum / 1000000}ms")
-
 }

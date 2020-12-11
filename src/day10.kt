@@ -24,7 +24,6 @@ fun main() {
     val todo = mutableMapOf(0 to 1L)
     while (todo.isNotEmpty()) {
         val (current, amount) = todo.minByOrNull { (k, _) -> k }!!
-        println(todo)
         todo.remove(current)
         if (current + 1 == device || current + 3 == device) {
             combinations += amount

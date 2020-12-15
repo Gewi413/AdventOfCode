@@ -3,7 +3,6 @@
 package day13
 
 import java.io.File
-import java.net.URLEncoder
 
 fun main() {
     val input = File("challenges/day13").readLines()
@@ -15,12 +14,14 @@ fun main() {
             break@outer
         }
     }
+
     val times = input[1].split(",")
-        .mapIndexedNotNull { i, time -> if (time == "x") null else Pair(time.toLong(), i) }
-    var wolframAlpha = ""
-    for ((schedule, offset) in times)
-        wolframAlpha += "(n + $offset) mod $schedule = 0, "
-    println("https://wolframalpha.com/input/?i=" + URLEncoder.encode(wolframAlpha, "UTF8"))
-    // will fix when i know how to
-    //println(803025030761664)
+        .mapIndexedNotNull { i, time -> if (time == "x") null else Pair(time.toLong(), i.toLong()) }
+    var step = 1L
+    var time = 1L
+    for ((schedule, offset) in times) {
+        while ((time + offset) % schedule != 0L) time += step
+        step *= schedule
+    }
+    println(time)
 }

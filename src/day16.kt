@@ -19,9 +19,10 @@ fun main() {
     }
 
     var invalid = 0
+    val required = requirements.values.flatten().toSet()
     val filteredTickets = tickets.filter { ticket ->
         for (value in ticket)
-            if (value !in requirements.values.flatten()) {
+            if (value !in required) {
                 invalid += value
                 return@filter false
             }
@@ -29,20 +30,20 @@ fun main() {
     }
     println(invalid)
 
-    val myTicket = input[1].split("\n")[1].split(",").map { it.toInt() }
+    val myTicket = input[1].split("\n")[1].split(",").map { it.toLong() }
 
     var todoReq = requirements.keys.toList()
     val todoInd = requirements.keys.indices.toMutableList()
     val done = mutableMapOf<String, Int>()
 
     while (todoReq.isNotEmpty()) {
+        println(todoReq)
         todoReq = todoReq.filter { requirement ->
             val values = requirements[requirement] ?: error("")
             val working = mutableSetOf<Int>()
-            for (i in todoInd) {
+            for (i in todoInd)
                 if (filteredTickets.all { it[i] in values })
                     working += i
-            }
             if (working.size == 1) {
                 todoInd.remove(working.first())
                 done[requirement] = working.first()
@@ -52,5 +53,5 @@ fun main() {
         }
     }
     val important = done.filter { (k, _) -> "departure" in k }.map { (_, v) -> v }
-    println(important.map { myTicket[it].toLong() }.reduce { a, i -> a * i })
+    println(important.map { myTicket[it] }.reduce { a, i -> a * i })
 }

@@ -18,12 +18,13 @@ import day14.main as day14
 import day15.main as day15
 import day16.main as day16
 import day17.main as day17
+import day18.main as day18
 
 fun main() {
     val days = listOf(
         ::day01, ::day02, ::day03, ::day04, ::day05, ::day06,
         ::day07, ::day08, ::day09, ::day10, ::day11, ::day12,
-        ::day13, ::day14, ::day15, ::day16, ::day17
+        ::day13, ::day14, ::day15, ::day16, ::day17, ::day18
     )
     System.setOut(PrintStream(OutputStream.nullOutputStream()))
     var sum = 0L

@@ -20,13 +20,18 @@ import day16.main as day16
 import day17.main as day17
 import day18.main as day18
 import day19.main as day19
+import day20.main as day20
+import day21.main as day21
+import day22.main as day22
+import day23.main as day23
+import day24.main as day24
 
 fun main() {
     val days = listOf(
         ::day01, ::day02, ::day03, ::day04, ::day05, ::day06,
         ::day07, ::day08, ::day09, ::day10, ::day11, ::day12,
         ::day13, ::day14, ::day15, ::day16, ::day17, ::day18,
-        ::day19
+        ::day19, ::day20, ::day21, ::day22, ::day23, ::day24
     )
     System.setOut(PrintStream(OutputStream.nullOutputStream()))
     var sum = 0L

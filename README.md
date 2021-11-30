@@ -6,13 +6,14 @@ My personal solutions to the coding advent calendar [Advent of Code](https://adv
 
 ### Check out other solutions
 
-| Name             | Language   | Link                                                      |
-| ---------------- | ---------- | --------------------------------------------------------- |
-| andi_makes       | C++        | [Link](https://github.com/andi-makes/aoc2021)             |
-| LeMoonStar       | C++        | [Link](https://github.com/LeMoonStar/AoC21)               |
-| networkException | TypeScript | [Link](https://github.com/networkException/AdventOfCode)  |
-| derNiklaas       | Java       | [Link](https://github.com/derNiklaas/Advent-Of-Code-2021) |
-| joblo2213        | Java       | [Link](https://github.com/joblo2213/AdventOfCode2021)     |
-| Hax              | Java       | [Link](https://github.com/Schlauer-Hax/advent-of-code)    |
-| Sammy            | C++        | [Link](https://github.com/1Turtle/AdventOfCode)           |
-| Trojaner         | TypeScript | [Link](https://github.com/TrojanerHD/AdventofCode2021)    |
+| Name             | Language   | Link                                                          |
+| ---------------- | ---------- | ------------------------------------------------------------- |
+| andi_makes       | Rust       | [Link](https://github.com/andi-makes/aoc2021)                 |
+| LeMoonStar       | Rust       | [Link](https://github.com/LeMoonStar/AoC21)                   |
+| networkException | TypeScript | [Link](https://github.com/networkException/AdventOfCode)      |
+| derNiklaas       | Kotlin     | [Link](https://github.com/derNiklaas/Advent-Of-Code-2021)     |
+| joblo2213        | Java       | [Link](https://github.com/joblo2213/AdventOfCode2021)         |
+| Hax              | Java       | [Link](https://github.com/Schlauer-Hax/advent-of-code)        |
+| Sammy            | Lua        | [Link](https://github.com/1Turtle/AdventOfCode)               |
+| Trojaner         | TypeScript | [Link](https://github.com/TrojanerHD/AdventofCode2021)        |
+| noeppi_noeppi    | Any        | [Link](https://github.com/noeppi-noeppi/aoc/tree/master/2021) |

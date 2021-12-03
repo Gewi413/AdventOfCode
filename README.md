@@ -15,5 +15,7 @@ My personal solutions to the coding advent calendar [Advent of Code](https://adv
 | joblo2213        | Java       | [Link](https://github.com/joblo2213/AdventOfCode2021)         |
 | Hax              | Java       | [Link](https://github.com/Schlauer-Hax/advent-of-code)        |
 | Sammy            | Lua        | [Link](https://github.com/1Turtle/AdventOfCode)               |
-| Trojaner         | TypeScript | [Link](https://github.com/TrojanerHD/AdventofCode2021)        |
+| Trojaner         | C++        | [Link](https://github.com/TrojanerHD/AdventofCode2021)        |
 | noeppi_noeppi    | Any        | [Link](https://github.com/noeppi-noeppi/aoc/tree/master/2021) |
+| theBreadCompany  | Swift      | [Link](https://github.com/theBreadCompany/AdventOfCode)       |
+

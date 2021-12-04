@@ -13,7 +13,7 @@ abstract class Day(val id: Int) {
                 try {
                     val name = it.toString().padStart(2, '0')
                     val clazz = Class.forName("Day$name")
-                    clazz.declaredFields[0].get(null) as Day
+                    clazz.declaredFields.first { f -> f.name == "INSTANCE" }.get(null) as Day
                 } catch (ignored: Exception) {
                     null
                 }
@@ -37,7 +37,7 @@ abstract class Day(val id: Int) {
                 System.setOut(stdout)
 
                 times.forEach { println("Day ${it.first.id}:${it.second}") }
-            }
+            } else if (args[0].toIntOrNull() != null) days[args[0].toInt() - 1].main()
         }
     }
 }

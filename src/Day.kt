@@ -26,18 +26,22 @@ abstract class Day(val id: Int) {
                 val stdout = System.out
                 System.setOut(PrintStream(OutputStream.nullOutputStream()))
                 val times = days.map {
-                    it to when (val time = (0..9).sumOf { _ -> measureNanoTime { it.main() } } / 10) {
-                        in 0..999 -> "${time}ns"
-                        in 1000..999999 -> "${time / 1000}µs"
-                        in 1000000..999999999 -> "${time / 1000000}ms"
-                        in 1000000000..59999999999 -> "${time / 1000000000}s"
-                        else -> "${time / 60000000000}min"
-                    }.padStart(7)
+                    val time = (0..9).sumOf { _ -> measureNanoTime { it.main() } } / 10
+                    Triple(it, formatTime(time), time)
                 }
                 System.setOut(stdout)
 
                 times.forEach { println("Day ${it.first.id}:${it.second}") }
+                println("\nTotal:${formatTime(times.sumOf { it.third })}")
             } else if (args[0].toIntOrNull() != null) days[args[0].toInt() - 1].main()
         }
+
+        private fun formatTime(time: Long) = when (time) {
+            in 0..999 -> "${time}ns"
+            in 1000..999999 -> "${time / 1000}µs"
+            in 1000000..999999999 -> "${time / 1000000}ms"
+            in 1000000000..59999999999 -> "${time / 1000000000}s"
+            else -> "${time / 60000000000}min"
+        }.padStart(7)
     }
 }

@@ -31,4 +31,3 @@ object Day04 : Day(4) {
         }
     }
 }
-

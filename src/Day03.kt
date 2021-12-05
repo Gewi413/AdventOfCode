@@ -9,7 +9,6 @@ object Day03 : Day(3) {
         println(solve(nums, length - 1) * solve(nums, length - 1, true))
     }
 
-    //1082324, 1353024
     private fun solve(nums: List<Int>, index: Int = 0, flip: Boolean = false): Int {
         val keep = (nums.sumBy { it and (1 shl index) } * 2 >= nums.size shl index) xor flip
         return if (nums.size <= 1) nums.first() else solve(

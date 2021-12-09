@@ -1,11 +1,11 @@
 object Day09 : Day(9) {
     override fun main() {
-        val heights = mutableMapOf<Pair<Int, Int>, Int>()
+        val heights = mutableMapOf<Point, Int>()
         val width = input[0].length
         val height = input.size
         for ((y, line) in input.withIndex()) for ((x, char) in line.withIndex())
             heights[x to y] = char - '0'
-        val low = mutableListOf<Pair<Int, Int>>()
+        val low = mutableListOf<Point>()
         for (x in 0 until width) for (y in 0 until height) {
             val curr = heights[x to y]!!
             if (listOf(x to y + 1, x to y - 1, x + 1 to y, x - 1 to y).all { (heights[it] ?: 10) > curr })
@@ -15,7 +15,7 @@ object Day09 : Day(9) {
         println(low.map { checkSize(heights, it)!!.size }.sorted().takeLast(3).fold(1) { a, b -> a * b })
     }
 
-    private fun checkSize(heights: Map<Pair<Int, Int>, Int>, point: Pair<Int, Int>): Set<Pair<Int, Int>>? {
+    private fun checkSize(heights: Map<Point, Int>, point: Point): Set<Point>? {
         if ((heights[point] ?: 9) == 9) return null
         val (x, y) = point
         return listOf(x to y + 1, x to y - 1, x + 1 to y, x - 1 to y)

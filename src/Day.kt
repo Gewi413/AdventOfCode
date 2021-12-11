@@ -31,7 +31,7 @@ abstract class Day(val id: Int) {
                 }
                 System.setOut(stdout)
 
-                times.forEach { println("Day ${it.first.id}:${it.second}") }
+                times.forEach { println("Day ${it.first.id.toString().padStart(2, ' ')}:${it.second}") }
                 println("\nTotal:${formatTime(times.sumOf { it.third })}")
             } else if (args[0].toIntOrNull() != null) days[args[0].toInt() - 1].main()
         }

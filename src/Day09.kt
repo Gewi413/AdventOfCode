@@ -1,10 +1,8 @@
 object Day09 : Day(9) {
     override fun main() {
-        val heights = mutableMapOf<Point, Int>()
+        val heights = parseToIntMap(input)
         val width = input[0].length
         val height = input.size
-        for ((y, line) in input.withIndex()) for ((x, char) in line.withIndex())
-            heights[x to y] = char - '0'
         val low = mutableListOf<Point>()
         for (x in 0 until width) for (y in 0 until height) {
             val curr = heights[x to y]!!

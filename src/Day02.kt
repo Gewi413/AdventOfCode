@@ -1,7 +1,6 @@
 object Day02 : Day(2) {
     override fun main() {
-        println(input.fold(0 to 0) { acc, next ->
-            val (op, arg) = next.toInstruction()
+        println(input.toInstruction().fold(0 to 0) { acc, (op, arg) ->
             val (x, y) = acc
             when (op) {
                 "forward" -> x + arg to y
@@ -11,8 +10,7 @@ object Day02 : Day(2) {
             }
         }.let { it.first * it.second })
 
-        println(input.fold(0 to 0 to 0) { acc, next ->
-            val (op, arg) = next.toInstruction()
+        println(input.toInstruction().fold(0 to 0 to 0) { acc, (op, arg) ->
             val (x, y, aim) = acc
             when (op) {
                 "forward" -> x + arg to y + aim * arg to aim

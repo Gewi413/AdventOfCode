@@ -2,7 +2,7 @@ fun List<String>.toInt(base: Int = 10) = map { it.toInt(base) }
 fun List<String>.toPoint() = map { val (a, b) = it.split(",").map { c -> c.toInt() }; a to b }
 fun List<String>.toInstruction() = map { it.toInstruction() }
 
-fun String.toInstruction() = run { val (ins, arg) = split(' '); ins to arg.toInt() }
+fun String.toInstruction(delim: Char = ' ') = run { val (ins, arg) = split(delim); ins to arg.toInt() }
 
 infix fun <A> Pair<A, A>.to(that: A) = Triple(first, second, that)
 

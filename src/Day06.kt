@@ -3,7 +3,6 @@ object Day06 : Day(6) {
         val fish = input[0]
             .split(",")
             .toInt()
-            .groupingBy { it }
             .eachCount()
             .map { (k, v) -> k to v.toLong() }
             .toMap() // this is needed

@@ -19,5 +19,5 @@ object Day05 : Day(5) {
             }
             else -> null
         }
-    }.flatten().groupingBy { it }.eachCount().values.count { it >= 2 }
+    }.flatten().eachCount().values.count { it >= 2 }
 }

@@ -9,9 +9,24 @@ infix fun <A> Pair<A, A>.to(that: A) = Triple(first, second, that)
 
 typealias Point = Pair<Int, Int>
 
-fun parseToIntMap(input: List<String>): Map<Point, Int> {
+fun Point.neighbors() = let { val (x, y) = this; listOf(x + 1 to y, x - 1 to y, x to y + 1, x to y - 1) }
+
+fun List<String>.toIntMap(): Map<Point, Int> {
     val map = mutableMapOf<Point, Int>()
-    for ((y, line) in input.withIndex()) for ((x, char) in line.withIndex())
+    for ((y, line) in withIndex()) for ((x, char) in line.withIndex())
         map[x to y] = char - '0'
     return map
+}
+
+fun Map<Point,Int>.print(markings: List<Point> = listOf()) {
+    val width = maxOf { it.key.first } + 1
+    val height = maxOf { it.key.second } + 1
+    for (y in 0..width) {
+        for (x in 0..height) {
+            val c = this[x to y]
+            if (x to y in markings) print("\u001b[32m$c\u001b[0m")
+            else print("$c")
+        }
+        println()
+    }
 }

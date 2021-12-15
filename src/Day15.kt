@@ -1,3 +1,4 @@
+import java.util.*
 import kotlin.math.abs
 
 object Day15 : Day(15) {
@@ -28,14 +29,17 @@ object Day15 : Day(15) {
     }
 
     private fun aStar(start: Point, end: Point, space: Map<Point, Int>): List<Point> {
-        val openSet = mutableListOf(start)
-        val cameFrom = mutableMapOf<Point, Point>()
-        val g = mutableMapOf(Pair(start, 0))
-        val f = mutableMapOf(Pair(start, hCost(start, end)))
+        val compare: (a: Point, b: Point) -> Int = { (a, b), (c, d) -> (a shl 16 xor b) - (c shl 16 xor d) }
+        val f = TreeMap<Point, Int>(compare)
+        val g = TreeMap<Point, Int>(compare)
+        f[start] = hCost(start, end)
+        g[start] = 0
+        val openSet = PriorityQueue<Point> { a, b -> f[a]!! - f[b]!! }
+        openSet.add(start)
+        val cameFrom = TreeMap<Point, Point>(compare)
         while (openSet.isNotEmpty()) {
-            val current = openSet.minByOrNull { f[it] ?: 2147483647 }!!
+            val current = openSet.poll()
             if (current == end) return reconstructPath(cameFrom, current)
-            openSet.remove(current)
             for (next in current.neighbors()) {
                 if (next !in space) continue
                 val newG = (g[current] ?: 2147483647) + space[current]!!

@@ -1,6 +1,6 @@
 object Day11 : Day(11) {
     override fun main() {
-        val energy = parseToIntMap(input).toMutableMap()
+        val energy = input.toIntMap().toMutableMap()
         var flashes = 0
         for (i in 1..10000) {
             for (x in input[0].indices) for (y in input.indices)

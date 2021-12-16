@@ -5,6 +5,8 @@ fun<T> List<T>.eachCount() = groupingBy { it }.eachCount()
 
 fun String.toInstruction(delim: Char = ' ') = run { val (ins, arg) = split(delim); ins to arg.toInt() }
 
+fun List<Boolean>.toInt() = mapIndexed { i, v -> if (v) 1 shl (size - 1 - i) else 0 }.sum()
+
 infix fun <A> Pair<A, A>.to(that: A) = Triple(first, second, that)
 
 typealias Point = Pair<Int, Int>

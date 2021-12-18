@@ -1,7 +1,7 @@
 fun List<String>.toInt(base: Int = 10) = map { it.toInt(base) }
 fun List<String>.toPoint() = map { val (a, b) = it.split(",").map { c -> c.toInt() }; a to b }
 fun List<String>.toInstruction() = map { it.toInstruction() }
-fun<T> List<T>.eachCount() = groupingBy { it }.eachCount()
+fun <T> List<T>.eachCount() = groupingBy { it }.eachCount()
 
 fun String.toInstruction(delim: Char = ' ') = run { val (ins, arg) = split(delim); ins to arg.toInt() }
 
@@ -20,7 +20,7 @@ fun List<String>.toIntMap(): Map<Point, Int> {
     return map
 }
 
-fun Map<Point,Int>.print(markings: List<Point> = listOf()) {
+fun Map<Point, Int>.print(markings: List<Point> = listOf()) {
     val width = maxOf { it.key.first } + 1
     val height = maxOf { it.key.second } + 1
     for (y in 0..width) {
@@ -31,4 +31,14 @@ fun Map<Point,Int>.print(markings: List<Point> = listOf()) {
         }
         println()
     }
+}
+
+fun <T> doUntilSettled(initial: T, function: (T) -> T): T {
+    var old: T? = null
+    var result = function(initial)
+    while (result != old) {
+        old = result
+        result = function(old)
+    }
+    return old!!
 }

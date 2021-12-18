@@ -8,6 +8,14 @@ object Day18 : Day(18) {
             }
         }
         println(out.value)
+
+        println(input.maxOf { first ->
+            input.maxOf { second ->
+                doUntilSettled((create(first) + create(second)) as SnailNumber) { state ->
+                    doUntilSettled(state) { it.explode(0).first }.split()
+                }.value
+            }
+        })
     }
 }
 

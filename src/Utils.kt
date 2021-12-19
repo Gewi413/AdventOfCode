@@ -1,3 +1,5 @@
+import kotlin.math.abs
+
 fun List<String>.toInt(base: Int = 10) = map { it.toInt(base) }
 fun List<String>.toPoint() = map { val (a, b) = it.split(",").map { c -> c.toInt() }; a to b }
 fun List<String>.toInstruction() = map { it.toInstruction() }
@@ -12,6 +14,8 @@ infix fun <A> Pair<A, A>.to(that: A) = Triple(first, second, that)
 typealias Point = Pair<Int, Int>
 
 fun Point.neighbors() = let { val (x, y) = this; listOf(x + 1 to y, x - 1 to y, x to y + 1, x to y - 1) }
+
+fun manhattan(p1: List<Int>, p2: List<Int>) = p1.zip(p2).sumBy { (a, b) -> abs(a - b) }
 
 fun List<String>.toIntMap(): Map<Point, Int> {
     val map = mutableMapOf<Point, Int>()

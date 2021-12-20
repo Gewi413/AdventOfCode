@@ -8,6 +8,7 @@ fun <T> List<T>.eachCount() = groupingBy { it }.eachCount()
 fun String.toInstruction(delim: Char = ' ') = run { val (ins, arg) = split(delim); ins to arg.toInt() }
 
 fun List<Boolean>.toInt() = mapIndexed { i, v -> if (v) 1 shl (size - 1 - i) else 0 }.sum()
+fun <T : Comparable<T>> Iterable<T>.minMax() = minOrNull()!! to maxOrNull()!!
 
 infix fun <A> Pair<A, A>.to(that: A) = Triple(first, second, that)
 
@@ -24,12 +25,12 @@ fun List<String>.toIntMap(): Map<Point, Int> {
     return map
 }
 
-fun Map<Point, Int>.print(markings: List<Point> = listOf()) {
-    val width = maxOf { it.key.first } + 1
-    val height = maxOf { it.key.second } + 1
-    for (y in 0..width) {
-        for (x in 0..height) {
-            val c = this[x to y]
+fun Map<Point, Int>.print(markings: Set<Point> = setOf()) {
+    val (minX, maxX) = keys.map { it.first }.minMax()
+    val (minY, maxY) = keys.map { it.second }.minMax()
+    for (y in minY..maxY) {
+        for (x in minX..maxX) {
+            val c = this[x to y] ?: 0
             if (x to y in markings) print("\u001b[32m$c\u001b[0m")
             else print("$c")
         }

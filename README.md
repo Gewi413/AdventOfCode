@@ -1,6 +1,6 @@
 # Advent of Code 2021
 
-![](https://img.shields.io/badge/Language-Kotlin-orange) ![](https://img.shields.io/badge/days%20completed-19-green) ![](https://img.shields.io/badge/stars%20⭐-38-yellow)
+![](https://img.shields.io/badge/Language-Kotlin-orange) ![](https://img.shields.io/badge/days%20completed-20-green) ![](https://img.shields.io/badge/stars%20⭐-40-yellow)
 
 My personal solutions to the coding advent calendar [Advent of Code](https://adventofcode.com/).
 

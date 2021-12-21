@@ -1,38 +1,22 @@
 object Day21 : Day(21) {
     override fun main() {
         val (start1, start2) = input.map { it.split(" ").last().toInt() }
-        var p1 = start1
-        var p2 = start2
-        var score1 = 0
-        var score2 = 0
-        var rolls = 0
-        var die = 1
+        var state = State(start1, start2)
         while (true) {
-            for (i in 1..3) {
-                p1 = (p1 + die - 1) % 10 + 1
-                die = die % 100 + 1
-                rolls++
-            }
-            score1 += p1
-            if (score1 >= 1000) {
-                println(rolls * score2)
+            state = advance(state)
+            if (state.score1 >= 1000) {
+                println(state.turn * state.score2)
                 break
             }
-            for (i in 1..3) {
-                p2 = (p2 + die - 1) % 10 + 1
-                die = die % 100 + 1
-                rolls++
-            }
-            score2 += p2
-            if (score2 >= 1000) {
-                println(rolls * score1)
+            if (state.score2 >= 1000) {
+                println(state.turn * state.score1)
                 break
             }
         }
 
         val states = mutableMapOf(State(start1, start2) to 1L)
         var winners = 0L to 0L
-        while (states.isNotEmpty() && rolls++ < 10000) {
+        while (states.isNotEmpty()) {
             states.entries.removeIf { (k, v) ->
                 when {
                     k.score1 >= 21 -> {
@@ -64,6 +48,24 @@ object Day21 : Day(21) {
             }
         }
         println(if (winners.first > winners.second) winners.first else winners.second)
+    }
+
+    private fun advance(state: State): State {
+        var (p1, p2, score1, score2, turn) = state
+        if (turn % 6 < 3) {
+            for (i in 1..3) {
+                p1 = (p1 + turn % 100) % 10 + 1
+                turn++
+            }
+            score1 += p1
+        } else {
+            for (i in 1..3) {
+                p2 = (p2 + turn % 100) % 10 + 1
+                turn++
+            }
+            score2 += p2
+        }
+        return State(p1, p2, score1, score2, turn)
     }
 
     data class State(val p1: Int, val p2: Int, val score1: Int = 0, val score2: Int = 0, val turn: Int = 0)

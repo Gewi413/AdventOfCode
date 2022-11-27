@@ -8,7 +8,7 @@ My personal solutions to the coding advent calendar [Advent of Code](https://adv
 
 | Name             | Language   | Link                                                          |
 | ---------------- | ---------- | ------------------------------------------------------------- |
-| andi_makes       | Rust       | [Link](https://github.com/andi-makes/aoc2022)                 |
+| andi_makes       | Rust       | [Link](https://git.schmarrn.dev/andi/aoc2022/)                |
 | LeMoonStar       | Rust       | [Link](https://github.com/LeMoonStar/AoC22)                   |
 | networkException | TypeScript | [Link](https://github.com/networkException/AdventOfCode)      |
 | derNiklaas       | Kotlin     | [Link](https://github.com/derNiklaas/Advent-Of-Code-2020)     |

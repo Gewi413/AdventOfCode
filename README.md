@@ -10,12 +10,12 @@ My personal solutions to the coding advent calendar [Advent of Code](https://adv
 | ---------------- | ---------- | ------------------------------------------------------------- |
 | andi_makes       | Rust       | [Link](https://git.schmarrn.dev/andi/aoc2022/)                |
 | LeMoonStar       | Rust       | [Link](https://github.com/LeMoonStar/AoC22)                   |
-| networkException | TypeScript | [Link](https://github.com/networkException/AdventOfCode)      |
+| networkException | Kotlin     | [Link](https://github.com/networkException/AdventOfCode)      |
 | derNiklaas       | Kotlin     | [Link](https://github.com/derNiklaas/Advent-Of-Code-2022)     |
-| joblo2213        | Java       | [Link](https://github.com/J0B10/AdventOfCode2022)             |
+| joblo2213        | Powershell | [Link](https://github.com/J0B10/AdventOfCode2022)             |
 | Hax              | Java       | [Link](https://github.com/Schlauer-Hax/advent-of-code)        |
 | Sammy            | Lua        | [Link](https://github.com/1Turtle/AdventOfCode)               |
-| Trojaner         | C++        | [Link](https://github.com/TrojanerHD/AdventofCode2022)        |
+| Trojaner         | TypeScript | [Link](https://github.com/TrojanerHD/AdventofCode2022)        |
 | noeppi_noeppi    | Any        | [Link](https://github.com/noeppi-noeppi/aoc/tree/master/2022) |
 | theBreadCompany  | Swift      | [Link](https://github.com/theBreadCompany/AdventOfCode)       |
 

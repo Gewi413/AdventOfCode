@@ -1,8 +1,8 @@
 object Day09 : Day(9) {
     override fun main() {
-        var headPos = 0 to 0
-        var tailPos = headPos
-        val positions = mutableSetOf(tailPos)
+        val pos = (0..9).map { 0 to 0 }.toMutableList()
+        val positions = mutableSetOf(pos[0])
+        val positionsB = mutableSetOf(pos[0])
         input.forEach { line ->
             val (dir, dist) = line.split(" ")
             val direction = when (dir) {
@@ -13,19 +13,25 @@ object Day09 : Day(9) {
                 else -> 0 to 0
             }
             repeat(dist.toInt()) {
-                headPos += direction
-                if (chessDistance(headPos.toList(), tailPos.toList()) > 1) {
-                    tailPos = when (headPos - tailPos) {
-                        2 to 1, 2 to 0, 2 to -1 -> headPos.first - 1 to headPos.second
-                        -2 to 1, -2 to 0, -2 to -1 -> headPos.first + 1 to headPos.second
-                        1 to 2, 0 to 2, -1 to 2 -> headPos.first to headPos.second - 1
-                        1 to -2, 0 to -2, -1 to -2 -> headPos.first to headPos.second + 1
-                        else -> headPos
+                pos[0] += direction
+                for (i in 0..8)
+                    pos[i + 1] = when (pos[i] - pos[i + 1]) {
+                        2 to 1, 2 to 0, 2 to -1 -> pos[i].first - 1 to pos[i].second
+                        -2 to 1, -2 to 0, -2 to -1 -> pos[i].first + 1 to pos[i].second
+                        1 to 2, 0 to 2, -1 to 2 -> pos[i].first to pos[i].second - 1
+                        1 to -2, 0 to -2, -1 to -2 -> pos[i].first to pos[i].second + 1
+                        2 to 2 -> pos[i].first - 1 to pos[i].second - 1
+                        -2 to 2 -> pos[i].first + 1 to pos[i].second - 1
+                        2 to -2 -> pos[i].first - 1 to pos[i].second + 1
+                        -2 to -2 -> pos[i].first + 1 to pos[i].second + 1
+                        else -> pos[i + 1]
                     }
-                }
-                positions += tailPos
+
+                positions += pos[1]
+                positionsB += pos[9]
             }
         }
         println(positions.size)
+        println(positionsB.size)
     }
 }

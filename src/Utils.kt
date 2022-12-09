@@ -18,6 +18,8 @@ fun Point.neighbors() = let { val (x, y) = this; listOf(x + 1 to y, x - 1 to y, 
 
 fun manhattan(p1: List<Int>, p2: List<Int>) = p1.zip(p2).sumBy { (a, b) -> abs(a - b) }
 
+fun chessDistance(p1: List<Int>, p2: List<Int>) = p1.zip(p2).maxOf { (a, b) -> abs(a - b) }
+
 fun List<String>.toIntMap(): Map<Point, Int> {
     val map = mutableMapOf<Point, Int>()
     for ((y, line) in withIndex()) for ((x, char) in line.withIndex())
@@ -47,3 +49,7 @@ fun <T> doUntilSettled(initial: T, function: (T) -> T): T {
     }
     return old!!
 }
+
+operator fun Point.plus(other: Point) = first + other.first to second + other.second
+
+operator fun Point.minus(other: Point) = first - other.first to second - other.second

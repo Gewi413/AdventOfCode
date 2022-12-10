@@ -20,8 +20,36 @@ object Day10 : Day(10) {
             val pix = cycle % 40
             crt += if (x in pix - 1..pix + 1) '#' else ' '
         }
-
         println(strength)
-        println(crt.dropLast(1).chunked(40).joinToString("\n") { it.joinToString("") })
+        crt.removeLast()
+
+        // stolen from 2021/13
+        val chars = listOf(
+            // telephone keypad grouping ABC, DEF, GHI, JKL, MNO, PQRS, TUV, WXYZ
+            // missing: DIMNOQSTVWXY - if you have those, tell me
+            422148690, 959335004, 422068812,
+            -1, 1024344606, 1024344592,
+            422074958, 623856210, -1,
+            203491916, 625758866, 554189342,
+            -1, -1, -1,
+            959017488, -1, 959017618, -1,
+            -1, 623462988, -1,
+            -1, -1, -1, 1008869918,
+        ).mapIndexed { i, v -> v to 'A' + i }.toMap()
+
+        val letters = crt.chunked(40).map { it.chunked(5) }
+
+        val message = (0..7).map { char ->
+            (0..5).flatMap { line -> letters[line][char] }.reversed()
+                .mapIndexed { i, c -> if (c == '#') 1 shl i else 0 }.sum()
+        }
+        println(
+            (0..4).flatMap { line -> letters[line][1] }.toString()
+        )
+        println(message[1].toString(2))
+        println(1008869918.toString(2))
+        println(message.map { chars[it] ?: "_" }.joinToString(""))
+
+        println(crt.chunked(40).joinToString("\n") { it.joinToString("") })
     }
 }

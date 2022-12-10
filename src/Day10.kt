@@ -38,18 +38,11 @@ object Day10 : Day(10) {
         ).mapIndexed { i, v -> v to 'A' + i }.toMap()
 
         val letters = crt.chunked(40).map { it.chunked(5) }
-
         val message = (0..7).map { char ->
             (0..5).flatMap { line -> letters[line][char] }.reversed()
                 .mapIndexed { i, c -> if (c == '#') 1 shl i else 0 }.sum()
         }
-        println(
-            (0..4).flatMap { line -> letters[line][1] }.toString()
-        )
-        println(message[1].toString(2))
-        println(1008869918.toString(2))
-        println(message.map { chars[it] ?: "_" }.joinToString(""))
 
-        println(crt.chunked(40).joinToString("\n") { it.joinToString("") })
+        println(message.map { chars[it] ?: "_" }.joinToString(""))
     }
 }

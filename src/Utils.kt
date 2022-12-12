@@ -10,7 +10,7 @@ fun String.toInstruction(delim: Char = ' ') = run { val (ins, arg) = split(delim
 fun List<Boolean>.toInt() = mapIndexed { i, v -> if (v) 1 shl (size - 1 - i) else 0 }.sum()
 fun <T : Comparable<T>> Iterable<T>.minMax() = minOrNull()!! to maxOrNull()!!
 
-infix fun <A> Pair<A, A>.to(that: A) = Triple(first, second, that)
+// infix fun <A> Pair<A, A>.to(that: A) = Triple(first, second, that) // no 3D (yet) thus this is annoying
 
 typealias Point = Pair<Int, Int>
 
@@ -20,10 +20,10 @@ fun manhattan(p1: List<Int>, p2: List<Int>) = p1.zip(p2).sumBy { (a, b) -> abs(a
 
 fun chessDistance(p1: List<Int>, p2: List<Int>) = p1.zip(p2).maxOf { (a, b) -> abs(a - b) }
 
-fun List<String>.toIntMap(): Map<Point, Int> {
+fun List<String>.toIntMap(radix: Int = 10): Map<Point, Int> {
     val map = mutableMapOf<Point, Int>()
     for ((y, line) in withIndex()) for ((x, char) in line.withIndex())
-        map[x to y] = char - '0'
+        map[x to y] = char.toString().toInt(radix) // hacky but works
     return map
 }
 
@@ -32,12 +32,13 @@ fun Map<Point, Int>.print(markings: Set<Point> = setOf()) {
     val (minY, maxY) = keys.map { it.second }.minMax()
     for (y in minY..maxY) {
         for (x in minX..maxX) {
-            val c = this[x to y] ?: 0
+            val c = (this[x to y] ?: 0).toString(36)
             if (x to y in markings) print("\u001b[32m$c\u001b[0m")
-            else print("$c")
+            else print(c)
         }
         println()
     }
+    println()
 }
 
 fun <T> doUntilSettled(initial: T, function: (T) -> T): T {

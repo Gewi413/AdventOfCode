@@ -3,12 +3,17 @@ object Day11 : Day(11) {
         val (monkeys, monkeysB) = input.joinToString("\n").split("\n\n").map { line ->
             val lines = line.split("\n").map { it.trim() }
             val items = lines[1].drop(16).split(", ").map { it.toLong() }
-            val (first, operation, second) = lines[2].drop(17).split(" ")
-            val lambda = parseExpr(first, operation, second)
+            val (operation, second) = lines[2].drop(21).split(" ")
+            val lambda =
+                if (second == "old") { num: Long -> num * num } // this is highly cursed because the { doesn't belong to the if
+                else when (operation) {
+                    "+" -> { num: Long -> num + second.toLong() }
+                    else -> { num: Long -> num * second.toLong() }
+                }
             val div = lines[3].split(" ").last().toLong()
             val (a, b) = lines.takeLast(2).map { it.last() - '0' }
             Monkey(items.toMutableList(), lambda, div, a to b) to
-                Monkey(items.toMutableList(), lambda, div, a to b)
+                    Monkey(items.toMutableList(), lambda, div, a to b)
         }.unzip()
 
         repeat(20) {
@@ -40,35 +45,12 @@ object Day11 : Day(11) {
         val (c, d) = monkeysB.sortedBy { it.inspections }.map { it.inspections.toLong() }.takeLast(2)
         println(c * d)
     }
-}
 
-class Monkey(
-    val items: MutableList<Long>,
-    val worried: (Long) -> Long,
-    val divisor: Long,
-    val next: Pair<Int, Int>
-) {
-    var inspections = 0
+    class Monkey(
+        val items: MutableList<Long>,
+        val worried: (Long) -> Long,
+        val divisor: Long,
+        val next: Pair<Int, Int>,
+        var inspections: Int = 0
+    )
 }
-
-// it just wouldnt let me do it in the same function
-fun parseExpr(first: String, operation: String, second: String): (Long) -> Long =
-    if (first == "old")
-        if (second == "old") when (operation) {
-            "+" -> { num: Long -> num + num }
-            "*" -> { num: Long -> num * num }
-            else -> { num: Long -> num }
-        } else when (operation) {
-            "+" -> { num: Long -> num + second.toLong() }
-            "*" -> { num: Long -> num * second.toLong() }
-            else -> { num: Long -> num }
-        }
-    else if (second == "old") when (operation) {
-        "+" -> { num: Long -> first.toLong() + num }
-        "*" -> { num: Long -> first.toLong() * num }
-        else -> { num: Long -> num }
-    } else when (operation) {
-        "+" -> { _: Long -> first.toLong() + second.toLong() }
-        "*" -> { _: Long -> second.toLong() * second.toLong() }
-        else -> { num: Long -> num }
-    }

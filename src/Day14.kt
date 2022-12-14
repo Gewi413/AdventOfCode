@@ -1,31 +1,42 @@
 object Day14 : Day(14) {
     override fun main() {
         val walls = input.flatMap { line ->
-            line
-                .split(" -> ")
+            line.split(" -> ")
                 .toPoint()
-                .zipWithNext { a, b ->
-                    if (a.first == b.first) (a.second range b.second).map { a.first to it }
-                    else (a.first range b.first).map { it to a.second }
-                }.flatten()
+                .zipWithNext()
+                .flatMap { (a, b) ->
+                    (a.first range b.first).flatMap { x ->
+                        (a.second range b.second).map { y -> x to y } // lets pretend its a rectangle
+                    }
+                }
         }.toSet()
 
-        val floor = walls.maxOf { it.second } + 2
-        val wallsB = walls + (-1000..1000).map { it to floor }
-
-        println(exec(walls, floor))
-        println(exec(wallsB, floor))
+        println(partA(walls))
+        println(partB(walls))
     }
 
-    private fun exec(initial: Set<Pair<Int, Int>>, floor: Int) = doUntilSettled(initial) { walls ->
+    private fun partA(initial: Set<Point>) = doUntilSettled(initial) { walls ->
         var pos = 500 to 0
         val attempts = listOf(0 to 1, -1 to 1, 1 to 1)
         while (true) {
-            if (pos.second > floor) return@doUntilSettled walls
-            attempts.firstOrNull { pos + it !in walls }?.let { pos += it } ?: break
+            if (pos.second > 1000) return@doUntilSettled walls
+            pos += attempts.firstOrNull { pos + it !in walls } ?: break
         }
         walls + pos
     }.size - initial.size
+
+    private fun partB(walls: Set<Point>): Int {
+        val floor = walls.maxOf { it.second } + 2
+        val sands = mutableSetOf<Point>()
+        var workingCopy = setOf(500 to 0)
+        for (i in 0 until floor) {
+            sands += workingCopy
+            workingCopy = workingCopy.flatMap { (x, y) ->
+                (-1..1).map { x + it to y + 1 }
+            }.filter { it !in walls }.toSet()
+        }
+        return sands.size
+    }
 
     private infix fun Int.range(to: Int) = if (to >= this) this..to else to..this
 }

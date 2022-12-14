@@ -28,7 +28,7 @@ object Day07 : Day(7) {
         println(path.first().allFiles().filter { it.size > needed }.minOf { it.size })
     }
 
-    data class File(val name: String, val content: Int = 0, val children: MutableList<File> = mutableListOf<File>()) {
+    data class File(val name: String, val content: Int = 0, val children: MutableList<File> = mutableListOf()) {
         val size: Int
             get() = children.sumBy { it.size } + content
 

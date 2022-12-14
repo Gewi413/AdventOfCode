@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 import kotlin.math.abs
 
 fun List<String>.toInt(base: Int = 10) = map { it.toInt(base) }

@@ -1,8 +1,12 @@
 import kotlin.math.max
+import kotlin.test.assertEquals
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 object Day16 : Day(16) {
+    @Suppress("OPT_IN_IS_NOT_ENABLED")
+    @OptIn(ExperimentalTime::class)
     override fun main() {
-        // Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
         val (valves, connections) = input.map { line ->
             val parts = line.split(" ")
             val id = parts[1]
@@ -19,45 +23,55 @@ object Day16 : Day(16) {
         }
         val start = valves.first { it.id == "AA" }
         //println(partA(start))
-        println(partB(start, start))
+        println(measureTime { assertEquals(1707, partB(State(start))) })
+        // 1831 too low
     }
 
     private fun partA(position: Valve, timeRemaining: Int = 30, open: Set<Valve> = setOf()): Int =
-        position.pathFind()
-            .filter { (valve, _) -> valve.rate != 0 && valve !in open }
+        position.paths
+            .filter { (valve, _) -> valve !in open }
             .map { (next, distance) -> next to timeRemaining - distance } // convert to List<Pair>
             .filter { (_, distance) -> distance > 0 }
             .sortedBy { (next, distance) -> distance * next.rate }
             .maxOfOrNull { (next, distance) -> distance * next.rate + partA(next, distance, open + next) } ?: 0
 
-    private fun partB(
-        position: Valve, positionElephant: Valve,
-        timeRemaining: Int = 26, timeElephant: Int = 26,
-        open: Set<Valve> = setOf()
-    ): Int {
-        val nextMe = position.pathFind()
-            .filter { (valve, _) -> valve.rate != 0 && valve !in open }
-            .map { (next, distance) -> next to timeRemaining - distance } // convert to List<Pair>
+    private data class State(
+        val position: Valve, val positionElephant: Valve = position,
+        val timeRemaining: Int = 26, val timeElephant: Int = timeRemaining,
+        val open: Set<Valve> = setOf()
+    ) {
+        fun swap() = State(positionElephant, position, timeElephant, timeRemaining, open)
+
+        fun advance(next: Valve, distance: Int) = State(next, positionElephant, distance, timeElephant, open + next)
+    }
+
+    private val cache = mutableMapOf<State, Int>()
+    private fun partB(s: State): Int {
+        val o = s.swap()
+        if (s in cache) return cache[s]!!
+        if (o in cache) return cache[o]!!
+        cache[s] = max(realPartB(s), realPartB(o))
+        cache[o] = cache[s]!!
+        return cache[s]!!
+    }
+
+    private fun realPartB(state: State): Int {
+        val next = state.position.paths
+            .filter { (valve, _) -> valve !in state.open }
+            .map { (next, distance) -> next to state.timeRemaining - distance } // convert to List<Pair>
             .filter { (_, distance) -> distance > 0 }
-            .sortedBy { (next, distance) -> distance * next.rate }
+            .sortedByDescending { (next, distance) -> distance * next.rate }
             .maxOfOrNull { (next, distance) ->
-                distance * next.rate + partB(next, positionElephant, distance, timeElephant, open + next)
+                distance * next.rate +
+                        partB(state.advance(next, distance))
+                .also { if (state.timeRemaining == 26) println(it) }
             } ?: 0
 
-        val nextE = positionElephant.pathFind()
-            .filter { (valve, _) -> valve.rate != 0 && valve !in open }
-            .map { (next, distance) -> next to timeElephant - distance } // convert to List<Pair>
-            .filter { (_, distance) -> distance > 0 }
-            .sortedBy { (next, distance) -> distance * next.rate }
-            .maxOfOrNull { (next, distance) ->
-                distance * next.rate + partB(position, next, timeRemaining, distance, open + next)
-            } ?: 0
-
-        return max(nextMe, nextE)
+        return next
     }
 
     private data class Valve(val id: String, val rate: Int, val connections: MutableList<Valve> = mutableListOf()) {
-        fun pathFind(): Map<Valve, Int> {
+        val paths by lazy {
             val todo = mutableSetOf(this)
             val done = mutableSetOf<Valve>()
             val costs = mutableMapOf(this to 1)
@@ -72,7 +86,7 @@ object Day16 : Day(16) {
                     if (next !in done) todo += next
                 }
             }
-            return costs
+            costs.filter { (valve, _) -> valve.rate != 0 }
         }
 
         override fun toString() = "Valve(id=$id, rate=$rate)"

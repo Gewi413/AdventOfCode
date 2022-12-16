@@ -1,11 +1,4 @@
-import kotlin.math.max
-import kotlin.test.assertEquals
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
-
 object Day16 : Day(16) {
-    @Suppress("OPT_IN_IS_NOT_ENABLED")
-    @OptIn(ExperimentalTime::class)
     override fun main() {
         val (valves, connections) = input.map { line ->
             val parts = line.split(" ")
@@ -21,52 +14,36 @@ object Day16 : Day(16) {
                 other.connections += valve
             }
         }
-        val start = valves.first { it.id == "AA" }
-        //println(partA(start))
-        println(measureTime { assertEquals(1707, partB(State(start))) })
-        // 1831 too low
+        start = valves.first { it.id == "AA" }
+        println(partA())
+        println(partB())
     }
 
-    private fun partA(position: Valve, timeRemaining: Int = 30, open: Set<Valve> = setOf()): Int =
-        position.paths
-            .filter { (valve, _) -> valve !in open }
+    private lateinit var start: Valve
+
+    private fun partA(position: Valve = start, timeRemaining: Int = 30, open: Set<Valve> = setOf()): Int =
+        position.paths.filter { (valve, _) -> valve !in open }
             .map { (next, distance) -> next to timeRemaining - distance } // convert to List<Pair>
             .filter { (_, distance) -> distance > 0 }
-            .sortedBy { (next, distance) -> distance * next.rate }
             .maxOfOrNull { (next, distance) -> distance * next.rate + partA(next, distance, open + next) } ?: 0
 
-    private data class State(
-        val position: Valve, val positionElephant: Valve = position,
-        val timeRemaining: Int = 26, val timeElephant: Int = timeRemaining,
-        val open: Set<Valve> = setOf()
-    ) {
-        fun swap() = State(positionElephant, position, timeElephant, timeRemaining, open)
-
-        fun advance(next: Valve, distance: Int) = State(next, positionElephant, distance, timeElephant, open + next)
+    private data class State(val position: Valve, val timeRemaining: Int = 26, val open: Set<Valve> = setOf()) {
+        fun advance(next: Valve, distance: Int) = State(next, distance, open + next)
     }
 
     private val cache = mutableMapOf<State, Int>()
-    private fun partB(s: State): Int {
-        val o = s.swap()
-        if (s in cache) return cache[s]!!
-        if (o in cache) return cache[o]!!
-        cache[s] = max(realPartB(s), realPartB(o))
-        cache[o] = cache[s]!!
-        return cache[s]!!
-    }
 
-    private fun realPartB(state: State): Int {
+    private fun partB(state: State = State(start), twice: Boolean = true): Int {
+        if (state in cache) return cache[state]!!
         val next = state.position.paths
             .filter { (valve, _) -> valve !in state.open }
-            .map { (next, distance) -> next to state.timeRemaining - distance } // convert to List<Pair>
+            .map { (next, distance) -> next to state.timeRemaining - distance }
             .filter { (_, distance) -> distance > 0 }
-            .sortedByDescending { (next, distance) -> distance * next.rate }
             .maxOfOrNull { (next, distance) ->
-                distance * next.rate +
-                        partB(state.advance(next, distance))
-                .also { if (state.timeRemaining == 26) println(it) }
-            } ?: 0
-
+                distance * next.rate + partB(state.advance(next, distance), twice)
+            }
+            ?: if (twice) partB(state.advance(start, 26), false) else 0
+        cache[state] = next
         return next
     }
 
@@ -81,8 +58,7 @@ object Day16 : Day(16) {
                 done += current
                 val nextTime = costs[current]!! + 1
                 for (next in current.connections) {
-                    if ((costs[next] ?: 1000) > nextTime)
-                        costs[next] = nextTime
+                    if ((costs[next] ?: 1000) > nextTime) costs[next] = nextTime
                     if (next !in done) todo += next
                 }
             }
@@ -108,6 +84,5 @@ object Day16 : Day(16) {
             result = 31 * result + rate
             return result
         }
-
     }
 }

@@ -12,32 +12,29 @@ object Day17 : Day(17) {
         )
         println(run(pieces, 2022, wind))
 
-        val cycle = pieces.size * wind.length
+        val repetition = run(pieces, 10000, wind, true).toInt()
 
         val length = 1000000000000
-        val once = run(pieces, cycle, wind)
-        val twice = run(pieces, 2 * cycle, wind)
-        val offset = length % cycle
-        val final = run(pieces, (cycle + offset).toInt(), wind)
-        val each = twice - once
-        val times = length / cycle - 1
-        println(times * each + once + final) // 1565434624629 too low
+        val (firstPiece, firstHeight) = history[repetition]!!
+        val (secondPiece, secondHeight) = history[-1]!!
+        val deltaPiece = secondPiece - firstPiece
+        val deltaHeight = secondHeight - firstHeight
+        val cyclesNeeded = length / deltaPiece - 1
+        val baseHeight = firstHeight + cyclesNeeded * deltaHeight
+        val stillNeeded = length - deltaPiece * cyclesNeeded - firstPiece
+        val stillHeight = run(pieces, stillNeeded.toInt() + firstPiece, wind) - firstHeight
+        println(baseHeight + stillHeight)
 
-        // cycle: 10091 (len of my input) * 5 (num pieces)
-        // 78982 at cycle: offset
-        // 157966 at 2*cycle
-        // each cycle: 157966
-        // num cycles: 99098206
-        // 3254 off: 84071 -> 5089
-        // 99098205 * 157966 + 78982 + 5089 = 15654147135101: too high
+        // 1564265129668
     }
 
-    private fun run(pieces: List<List<Point>>, amount: Int, wind: String): Long {
+    private val history = mutableMapOf<Int, Pair<Int, Long>>() // wind*5+piece -> pieceCount, height
+    private fun run(pieces: List<List<Point>>, amount: Int, wind: String, cycles: Boolean = false): Long {
+        history.clear()
         var currWind = 0
         var height = 0L
-        val board =
-            ((0..6).map { it to 0L } +
-                    (0L..(amount * 2.5 + 10).toLong()).flatMap { listOf(-1 to it, 7 to it) }).toMutableSet()
+        val board = ((0..6).map { it to 0L } +
+                (0L..(amount * 2.5 + 10).toLong()).flatMap { listOf(-1 to it, 7 to it) }).toMutableSet()
 
         for (i in 0 until amount) {
             var current = pieces[i % pieces.size].map { (x, y) -> x to y + height + 4L }
@@ -55,6 +52,11 @@ object Day17 : Day(17) {
                 if ((test intersect board).isNotEmpty()) {
                     height = max(current.maxOfOrNull { (x, y) -> y }!!, height)
                     board += current
+                    if (cycles && 5 * currWind + i % pieces.size in history) {
+                        history[-1] = i to height
+                        return (5 * currWind + i % pieces.size).toLong()
+                    }
+                    history[5 * currWind + i % pieces.size] = i to height
                     break
                 }
                 current = test

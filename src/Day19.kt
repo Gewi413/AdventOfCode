@@ -3,10 +3,22 @@ object Day19 : Day(19) {
         val startStates = input.mapIndexed { i, line ->
             val (oreOre, clayOre, obsidianOre, obsidianClay, geodeClay, geodeObsidian) = line.split(" ")
                 .mapNotNull { it.toIntOrNull() }
-            State(Blueprint(i + 1, oreOre, clayOre, obsidianOre, obsidianClay, geodeClay, geodeObsidian))
+            State(blueprint = Blueprint(i + 1, oreOre, clayOre, obsidianOre, obsidianClay, geodeClay, geodeObsidian))
         }
-        println(startStates.map { it.process() })
-        println(State.thing)
+        var sum = 0
+        for (state in startStates) {
+            sum += state.process(24).geodes * state.blueprint.id
+            State.cache.clear()
+            println(state.blueprint.id)
+        }
+        println(sum)
+        var product = 1
+        for (state in startStates.take(3)) {
+            product *= state.process(32).geodes
+            State.cache.clear()
+            println(state.blueprint.id)
+        }
+        println(product)
     }
 
     private operator fun <E> List<E>.component6(): E = get(5)
@@ -15,19 +27,17 @@ object Day19 : Day(19) {
     var done = 0
 
     data class State(
-        val blueprint: Blueprint, val time: Int = 0,
+        val time: Int = 0,
         val oreBots: Int = 1, val ore: Int = 0,
         val clayBots: Int = 0, val clay: Int = 0,
         val obsidianBots: Int = 0, val obsidian: Int = 0,
-        val geodeBots: Int = 0, val geodes: Int = 0,
+        val geodeBots: Int = 0, val geodes: Int = 0, val blueprint: Blueprint,
     ) {
         companion object {
-            private val cache = mutableMapOf<State, State>()
-            val thing = MutableList(24) { 0 }
+            val cache = mutableMapOf<State, State>()
         }
 
-        fun process(): State {
-            thing[time]++
+        fun process(length: Int): State {
             if (this in cache) return cache[this]!!
             val processed = copy(
                 time = time + 1,
@@ -37,29 +47,28 @@ object Day19 : Day(19) {
                 geodes = geodes + geodeBots
             )
             val possibilities = mutableListOf(processed)
-            if (oreBots < blueprint.maxOre && ore > blueprint.oreOre) possibilities +=
+            if (oreBots < blueprint.maxOre && ore >= blueprint.oreOre) possibilities +=
                 processed.copy(ore = processed.ore - blueprint.oreOre, oreBots = oreBots + 1)
-            if (clayBots < blueprint.obsidianClay && ore > blueprint.clayOre) possibilities +=
+            if (clayBots < blueprint.obsidianClay && ore >= blueprint.clayOre) possibilities +=
                 processed.copy(ore = processed.ore - blueprint.clayOre, clayBots = clayBots + 1)
-            if (obsidianBots < blueprint.geodeObsidian && ore > blueprint.obsidianOre && clay > blueprint.obsidianClay)
+            if (obsidianBots < blueprint.geodeObsidian && ore >= blueprint.obsidianOre && clay >= blueprint.obsidianClay)
                 possibilities += processed.copy(
                     ore = processed.ore - blueprint.obsidianOre,
                     clay = processed.clay - blueprint.obsidianClay,
                     obsidianBots = obsidianBots + 1
                 )
-            if (ore > blueprint.geodeOre && obsidian > blueprint.geodeObsidian)
-                possibilities.clear()
+            if (ore >= blueprint.geodeOre && obsidian >= blueprint.geodeObsidian) {
                 possibilities += processed.copy(
                     ore = processed.ore - blueprint.geodeOre,
                     obsidian = processed.obsidian - blueprint.geodeObsidian,
                     geodeBots = geodeBots + 1
                 )
-            if (time < 5) println("processing with $time (${possibilities.size} paths)")
+            }
             done++
             if (done % 10000000 == 0) println("processed $done")
             val out =
-                if (time == 23) possibilities.maxByOrNull { it.geodes }!!
-                else possibilities.map { it.process() }.maxByOrNull { it.geodes }!!
+                if (time == length -1) possibilities.maxByOrNull { it.geodes }!!
+                else possibilities.map { it.process(length) }.maxByOrNull { it.geodes }!!
             cache[this] = out
             return out
         }

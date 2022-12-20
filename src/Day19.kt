@@ -1,5 +1,3 @@
-import kotlin.math.max
-
 object Day19 : Day(19) {
     override fun main() {
         val startStates = input.mapIndexed { i, line ->
@@ -25,12 +23,11 @@ object Day19 : Day(19) {
     ) {
         companion object {
             private val cache = mutableMapOf<State, State>()
-            val thing = MutableList(25) { 0 }
+            val thing = MutableList(24) { 0 }
         }
 
         fun process(): State {
             thing[time]++
-            if (time == 24) return this
             if (this in cache) return cache[this]!!
             val processed = copy(
                 time = time + 1,
@@ -42,23 +39,27 @@ object Day19 : Day(19) {
             val possibilities = mutableListOf(processed)
             if (oreBots < blueprint.maxOre && ore > blueprint.oreOre) possibilities +=
                 processed.copy(ore = processed.ore - blueprint.oreOre, oreBots = oreBots + 1)
-            if (clayBots < blueprint.maxClay && ore > blueprint.clayOre) possibilities +=
+            if (clayBots < blueprint.obsidianClay && ore > blueprint.clayOre) possibilities +=
                 processed.copy(ore = processed.ore - blueprint.clayOre, clayBots = clayBots + 1)
-            if (obsidianBots < blueprint.geodeObsidian && ore > blueprint.obsidianOre && clay > blueprint.obsidianClay) possibilities += processed.copy(
-                ore = processed.ore - blueprint.obsidianOre,
-                clay = processed.clay - blueprint.obsidianClay,
-                obsidianBots = obsidianBots + 1
-            )
-            if (clay > blueprint.geodeClay && obsidian > blueprint.geodeObsidian)
+            if (obsidianBots < blueprint.geodeObsidian && ore > blueprint.obsidianOre && clay > blueprint.obsidianClay)
                 possibilities += processed.copy(
-                    clay = processed.clay - blueprint.geodeClay,
+                    ore = processed.ore - blueprint.obsidianOre,
+                    clay = processed.clay - blueprint.obsidianClay,
+                    obsidianBots = obsidianBots + 1
+                )
+            if (ore > blueprint.geodeOre && obsidian > blueprint.geodeObsidian)
+                possibilities.clear()
+                possibilities += processed.copy(
+                    ore = processed.ore - blueprint.geodeOre,
                     obsidian = processed.obsidian - blueprint.geodeObsidian,
                     geodeBots = geodeBots + 1
                 )
             if (time < 5) println("processing with $time (${possibilities.size} paths)")
             done++
             if (done % 10000000 == 0) println("processed $done")
-            val out = possibilities.map { it.process() }.maxByOrNull { it.geodes }!!
+            val out =
+                if (time == 23) possibilities.maxByOrNull { it.geodes }!!
+                else possibilities.map { it.process() }.maxByOrNull { it.geodes }!!
             cache[this] = out
             return out
         }
@@ -69,9 +70,8 @@ object Day19 : Day(19) {
         val oreOre: Int,
         val clayOre: Int,
         val obsidianOre: Int, val obsidianClay: Int,
-        val geodeClay: Int, val geodeObsidian: Int,
+        val geodeOre: Int, val geodeObsidian: Int,
     ) {
-        val maxOre = max(max(oreOre, clayOre), obsidianOre)
-        val maxClay = max(obsidianClay, geodeClay)
+        val maxOre = listOf(oreOre, clayOre, obsidianOre, geodeOre).maxOrNull()!! //love this deprecation
     }
 }

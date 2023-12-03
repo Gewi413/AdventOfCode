@@ -16,7 +16,12 @@ fun <T : Comparable<T>> Iterable<T>.minMax() = minOrNull()!! to maxOrNull()!!
 
 typealias Point = Pair<Int, Int>
 
-fun Point.neighbors() = let { val (x, y) = this; listOf(x + 1 to y, x - 1 to y, x to y + 1, x to y - 1) }
+fun Point.neighbors(diagonal: Boolean = false) = let {
+    val (x, y) = this;
+    val neighbors = listOf(x + 1 to y, x - 1 to y, x to y + 1, x to y - 1)
+    if (diagonal) return neighbors + listOf(x + 1 to y + 1, x - 1 to y + 1, x + 1 to y - 1, x - 1 to y - 1)
+    neighbors
+}
 
 fun manhattan(p1: List<Int>, p2: List<Int>) = p1.zip(p2).sumBy { (a, b) -> abs(a - b) }
 

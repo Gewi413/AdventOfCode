@@ -6,33 +6,29 @@ object Day03 : Day(3) {
         for ((y, line) in input.withIndex()) {
             var curr = ""
             var next = false
-            val gearsPos = mutableSetOf<Point>()
+            var gearPos: Point? = null
             for ((x, char) in line.withIndex()) {
                 if (char.isDigit()) {
                     curr += char
                     for (neighbor in (x to y).neighbors(true)) {
                         val neighborChar = input.getOrElse(neighbor.second) { "." }.getOrElse(neighbor.first) { '.' }
-                        if (neighborChar == '*') gearsPos += neighbor
+                        if (neighborChar == '*') gearPos = neighbor
                         if (!neighborChar.isDigit() && neighborChar != '.') next = true
                     }
                 } else {
                     if (next) total += curr.toInt()
-                    gearsPos.forEach {
-                        if (it in gears) {
-                            totalGears += curr.toInt() * gears[it]!!
-                        } else gears[it] = curr.toInt()
-                    }
-                    gearsPos.clear()
+                    if (gearPos != null)
+                        if (gearPos in gears) totalGears += curr.toInt() * gears[gearPos]!!
+                        else gears[gearPos] = curr.toInt()
+                    gearPos = null
                     curr = ""
                     next = false
                 }
             }
             if (next) total += curr.toInt()
-            gearsPos.forEach {
-                if (it in gears) {
-                    totalGears += curr.toInt() * gears[it]!!
-                } else gears[it] = curr.toInt()
-            }
+            if (gearPos != null)
+                if (gearPos in gears) totalGears += curr.toInt() * gears[gearPos]!!
+                else gears[gearPos] = curr.toInt()
         }
         println(total)
         println(totalGears)

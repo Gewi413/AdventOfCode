@@ -3,6 +3,7 @@
 import kotlin.math.abs
 
 fun List<String>.toInt(base: Int = 10) = map { it.toInt(base) }
+fun List<String>.toLong(base: Int = 10) = map { it.toLong(base) }
 fun List<String>.toPoint() = map { val (a, b) = it.split(",").map { c -> c.toInt() }; a to b }
 fun List<String>.toInstruction() = map { it.toInstruction() }
 fun <T> List<T>.eachCount() = groupingBy { it }.eachCount()

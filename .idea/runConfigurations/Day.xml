@@ -3,7 +3,7 @@
     <option name="MAIN_CLASS_NAME" value="Day" />
     <module name="AdventOfCode" />
     <shortenClasspath name="NONE" />
-    <option name="VM_PARAMETERS" value="-Xmx8G" />
+    <option name="VM_PARAMETERS" value="-Xmx28G" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

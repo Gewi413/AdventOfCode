@@ -49,6 +49,20 @@ fun Map<Point, Int>.print(markings: Set<Point> = setOf()) {
     println()
 }
 
+fun Map<Point, Char>.printChars(markings: Set<Point> = setOf()) {
+    val (minX, maxX) = keys.map { it.first }.minMax()
+    val (minY, maxY) = keys.map { it.second }.minMax()
+    for (y in minY..maxY) {
+        for (x in minX..maxX) {
+            val c = this[x to y] ?: "."
+            if (x to y in markings) print("\u001b[32m$c\u001b[0m")
+            else print(c)
+        }
+        println()
+    }
+    println()
+}
+
 fun <T> doUntilSettled(initial: T, function: (T) -> T): T {
     var old: T? = null
     var result = function(initial)

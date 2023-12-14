@@ -10,7 +10,7 @@ object Day12 : Day(12) {
             val rules = nums.split(",").toInt()
             (0 until repeats).joinToString("?") { input }.replace("\\.+".toRegex(), ".")
                 .trim('.') to ((0 until repeats).flatMap { rules })
-        }.sumOf { solve(it.first.toList(), it.second) }
+        }.parallelStream().mapToLong { solve(it.first.toList(), it.second) }.sum()
     }
 
     private val cache = HashMap<Pair<List<Char>, List<Int>>, Long>()

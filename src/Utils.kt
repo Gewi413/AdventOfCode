@@ -76,3 +76,5 @@ fun <T> doUntilSettled(initial: T, function: (T) -> T): T {
 operator fun Point.plus(other: Point) = first + other.first to second + other.second
 
 operator fun Point.minus(other: Point) = first - other.first to second - other.second
+
+operator fun Point.times(other: Int) = first * other to second * other

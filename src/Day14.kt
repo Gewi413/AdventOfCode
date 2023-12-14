@@ -25,6 +25,17 @@ object Day14 : Day(14) {
         println(cache.entries.single { it.value == cycleStart + offset }.key.sumBy { input.size - it.second })
     }
 
+    private fun rollNotWorking(rollable: List<Point>, rocks: Set<Point>, dir: Point = (0 to -1)): List<Point> {
+        return doUntilSettled(rollable) { state ->
+            state.map {
+                val next = it + dir
+                if (next in rocks || next in state) {
+                    it
+                } else next
+            }
+        }
+    }
+
     private fun roll(rollable: List<Point>, rocks: Set<Point>, dir: Point = (0 to -1)): List<Point> {
         val (minX, maxX) = rollable.map { it.first }.minMax()
         val (minY, maxY) = rollable.map { it.second }.minMax()

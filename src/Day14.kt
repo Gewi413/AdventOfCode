@@ -1,6 +1,6 @@
 object Day14 : Day(14) {
     override fun main() {
-        val data = input.map { it.replace('.', '0').replace('#', '1').replace('O', '2') }
+        val data = input.map { it.replaceAll(".0", "#1", "O2") }
             .toIntMap()
         val rocks = data.filter { it.value == 1 }.keys +
                 input[0].indices.flatMap { listOf(it to -1, it to input.size) } +

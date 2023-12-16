@@ -2,7 +2,7 @@ import kotlin.math.absoluteValue
 
 object Day11 : Day(11) {
     override fun main() {
-        val map = input.map { it.replace("#", "1").replace(".", "0") }.toIntMap().filter { it.value != 0 }.keys
+        val map = input.map { it.replaceAll("#1", ".0") }.toIntMap().filter { it.value != 0 }.keys
         println(calc(map, 2) / 2)
         println(calc(map, 1000000) / 2)
     }

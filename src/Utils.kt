@@ -18,7 +18,7 @@ fun <T : Comparable<T>> Iterable<T>.minMax() = minOrNull()!! to maxOrNull()!!
 typealias Point = Pair<Int, Int>
 
 fun Point.neighbors(diagonal: Boolean = false) = let {
-    val (x, y) = this;
+    val (x, y) = this
     val neighbors = listOf(x + 1 to y, x - 1 to y, x to y + 1, x to y - 1)
     if (diagonal) return neighbors + listOf(x + 1 to y + 1, x - 1 to y + 1, x + 1 to y - 1, x - 1 to y - 1)
     neighbors
@@ -78,3 +78,6 @@ operator fun Point.plus(other: Point) = first + other.first to second + other.se
 operator fun Point.minus(other: Point) = first - other.first to second - other.second
 
 operator fun Point.times(other: Int) = first * other to second * other
+
+tailrec fun String.replaceAll(vararg replacements: String): String = if (replacements.isEmpty()) this else
+    replace(replacements.first()[0], replacements.first()[1]).replaceAll(*replacements.drop(1).toTypedArray())

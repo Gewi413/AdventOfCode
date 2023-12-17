@@ -1,6 +1,6 @@
 # Advent of Code 2023
 
-![](https://img.shields.io/badge/Language-Kotlin-orange) ![](https://img.shields.io/badge/days%20completed-16-green) ![](https://img.shields.io/badge/stars%20⭐-32-yellow)
+![](https://img.shields.io/badge/Language-Kotlin-orange) ![](https://img.shields.io/badge/days%20completed-17-green) ![](https://img.shields.io/badge/stars%20⭐-34-yellow)
 
 My personal solutions to the coding advent calendar [Advent of Code](https://adventofcode.com/).
 

@@ -79,5 +79,7 @@ operator fun Point.minus(other: Point) = first - other.first to second - other.s
 
 operator fun Point.times(other: Int) = first * other to second * other
 
+operator fun Point.unaryMinus() = -first to -second
+
 tailrec fun String.replaceAll(vararg replacements: String): String = if (replacements.isEmpty()) this else
     replace(replacements.first()[0], replacements.first()[1]).replaceAll(*replacements.drop(1).toTypedArray())

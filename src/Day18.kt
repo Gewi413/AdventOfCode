@@ -1,39 +1,44 @@
+import kotlin.math.abs
+
 object Day18 : Day(18) {
     override fun main() {
-        val moves = input.map { line ->
+        val (movesA, movesB) = input.map { line ->
             val (dir, count, col) = line.split(" ")
-            dir to (count.toInt() to col.drop(2).dropLast(1).toInt(16))
-        }
-        println(solve(moves.map { it.first to it.second.first}))
-        println(solve(moves.map { it.first to it.second.second}))
+            val foo = col.drop(2).dropLast(1)
+            (dir.first() to count.toInt()) to (foo.last() to foo.take(5).toInt(16))
+        }.unzip()
+        println(solve(movesA))
+        println(solve(movesB))
     }
 
-    private fun solve(moves: List<Pair<String, Int>>): Int {
+    private fun solve(moves: List<Pair<Char, Int>>): Long {
         var pos = 0 to 0
-        val dug = mutableSetOf<Point>()
+        val dug = mutableListOf(pos)
+        var sum = 1L //yes (I think starting pos issue)
         for ((dir, count) in moves) {
+            var outsideCorner = false
             val direction = when (dir) {
-                "L" -> -1 to 0
-                "R" -> 1 to 0
-                "U" -> 0 to -1
-                "D" -> 0 to 1
+                in "0R" -> {
+                    outsideCorner = true
+                    1 to 0
+                }
+                in "1D" -> {
+                    outsideCorner = true
+                    0 to 1
+                }
+                in "2L" -> -1 to 0
+                in "3U" -> 0 to -1
                 else -> throw NotImplementedError()
             }
-            repeat(count) {
-                pos += direction
-                dug += pos
-            }
+            pos += direction * count
+            dug += pos
+            if(outsideCorner) sum += count
         }
-
-        val done = mutableSetOf<Point>()
-        val todo = mutableSetOf(1 to 1) //if(!halts) use another point
-        while (todo.isNotEmpty()) {
-            val next = todo.first()
-            todo.remove(next)
-            done += next
-            todo += next.neighbors().filter { it !in done && it !in dug }
+        var shoelace = 0L
+        for (i in 0 until dug.lastIndex) {
+            shoelace += dug[i].first.toLong() * dug[i + 1].second
+            shoelace -= dug[i].second.toLong() * dug[i + 1].first
         }
-        val hole = (done + dug)
-        return (hole.size)
+        return abs(shoelace / 2) + sum
     }
 }

@@ -21,41 +21,27 @@ object Day20 : Day(20) {
 
         var on = 0L
         var off = 0L
-        repeat(1000) {
+
+        var presses = 0L
+        val l1 = modules.values.single { it.outputs.singleOrNull() == "rx" } as Conjunction
+        val l2 = l1.inputs.keys.map { modules[it] as Conjunction }.flatMap { it.inputs.keys }
+        val cycles = mutableMapOf<String, Long>()
+        outer@ while (true) {
+            presses++
             val queue = mutableListOf(Triple("button", "broadcaster", false))
             while (queue.isNotEmpty()) {
                 val (from, to, state) = queue.first()
-                //println("$from -$state-> $to")
-                queue.removeFirst()
+                if (!state && from in l2 && from !in cycles) {
+                    cycles[from] = presses
+                    if (cycles.size == l2.size) break@outer
+                }
                 if (state) on++ else off++
+                queue.removeFirst()
                 queue += modules[to]?.receive(from, state) ?: continue
             }
-            //println(modules.values.joinToString("\n"))
+            if (presses == 1000L) println(on * off)
         }
-        // 80349780..
-        println(on * off)
-        modules.values.forEach {
-            if (it is FlipFlop) it.state = false
-            else if (it is Conjunction) it.inputs.replaceAll { _, _ -> false }
-        }
-
-        modules["rx"] = Output("rx", emptyList())
-        var i = 0
-        modules.values.single { it.outputs.singleOrNull() == "rx" }
-        try {
-            while (true) {
-                val queue = mutableListOf(Triple("button", "broadcaster", false))
-                while (queue.isNotEmpty()) {
-                    val (from, to, state) = queue.first()
-                    queue.removeFirst()
-                    if (state) on++ else off++
-                    queue += modules[to]?.receive(from, state) ?: continue
-                }
-                i++
-            }
-        } catch (_: Throwable) {
-        }
-        println(i)
+        println(cycles.values.fold(1L) { acc, i -> acc * i })
     }
 
     open class Module(val name: String, val outputs: List<String>) {
@@ -72,7 +58,7 @@ object Day20 : Day(20) {
     }
 
     class FlipFlop(name: String, outputs: List<String>) : Module(name, outputs) {
-        var state: Boolean = false
+        private var state: Boolean = false
         override fun receive(from: String, input: Boolean): List<Triple<String, String, Boolean>> {
             if (input) return emptyList()
             state = !state
@@ -93,13 +79,6 @@ object Day20 : Day(20) {
 
         override fun toString(): String {
             return "Conjunction(name=$name, outputs=$outputs, state=$inputs)"
-        }
-    }
-
-    class Output(name: String, outputs: List<String>) : Module(name, outputs) {
-        override fun receive(from: String, input: Boolean): List<Triple<String, String, Boolean>> {
-            if (!input) throw Throwable("wheee")
-            return emptyList()
         }
     }
 }

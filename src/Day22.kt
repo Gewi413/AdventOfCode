@@ -13,13 +13,7 @@ object Day22 : Day(22) {
             }
         }
 
-        val now = doUntilSettled(initial) { bricks ->
-            val taken = bricks.flatMap { it.positions }.toSet()
-            bricks.map {
-                if (it.positions.any { pos -> pos[2] <= 1 || (down(pos) in taken && down(pos) !in it.positions) }) it
-                else Brick(it.positions.map(::down))
-            }
-        }
+        val now = fall(initial).map { Brick(it.positions, false) }
         now.forEach { brick ->
             val below = brick.positions.map(::down).toSet()
             brick.supported = now.filter { it.positions.any { p -> p in below } }.toSet() - brick
@@ -27,16 +21,25 @@ object Day22 : Day(22) {
         println(now.count { down ->
             !now.any { it.supported.singleOrNull() == down }
         })
+
+        println(now.sumBy { brick ->
+            val new = now - brick
+            fall(new).count { it.fell }
+        })
+    }
+
+    private fun fall(initial: List<Brick>) = doUntilSettled(initial) { bricks ->
+        val taken = bricks.flatMap { it.positions }.toSet()
+        bricks.map {
+            if (it.positions.any { pos -> pos[2] <= 1 || (down(pos) in taken && down(pos) !in it.positions) }) it
+            else Brick(it.positions.map(::down), true)
+        }
     }
 
     private fun down(pos: List<Int>) = listOf(pos[0], pos[1], pos[2] - 1)
 
-    data class Brick(val positions: List<List<Int>>) {
-        companion object{
-            private  var counter = 1
-        }
+    data class Brick(val positions: List<List<Int>>, val fell: Boolean = false) {
         var supported = setOf<Brick>()
-        val id = counter++
         override fun toString(): String {
             return id.toString()
         }

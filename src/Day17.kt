@@ -1,3 +1,6 @@
+import java.util.*
+import kotlin.math.pow
+
 object Day17 : Day(17) {
     override fun main() {
         val regs = input.first().split(": ").last().toLong()
@@ -5,6 +8,60 @@ object Day17 : Day(17) {
         val out = execute(intcode, regs)
         println(out.joinToString(","))
 
+        val rng = Random()
+        var curr: Long
+        forever@ while (true) { // let's go gambling
+            curr = 0
+            outer@ while (true) {
+                val score = score(intcode, curr)
+                if (score == 0.0) {
+                    break
+                }
+
+                for (tosses in 0..4) {
+                    var i = 0
+                    while (i++ < (20.0.pow(tosses + 1))) {
+                        val flips = (0..tosses).map { rng.nextInt() % 50 }
+                        var guess = curr
+                        for (flip in flips) {
+                            guess = guess xor (1L shl flip)
+                        }
+                        val newScore = score(intcode, guess)
+                        if (newScore < score) {
+                            curr = guess
+                            continue@outer
+                        }
+                    }
+
+                }
+                continue@forever
+            }
+            break
+        }
+
+
+        for(i in curr - 1000000..curr) { // idk
+            if(score(intcode, i) == 0.0) {
+                println("$i")
+                break
+            }
+        }
+    }
+
+
+    private fun score(intcode: List<Int>, initialA: Long): Double {
+        val res = execute(intcode, initialA)
+        if (res.size != intcode.size) {
+            return 42.0
+        }
+        return intcode.zip(res).fold(0.0) { acc, (a, b) ->
+            acc * 0.99 + when (a xor b) {
+                1, 2, 4 -> 1
+                3, 5, 6 -> 2
+                7 -> 3
+                else -> 0
+            }
+        }
     }
 
     private fun execute(intcode: List<Int>, initialA: Long): List<Int> {
@@ -12,7 +69,8 @@ object Day17 : Day(17) {
         var b = 0L
         var c = 0L
         var ip = 0
-        val out = mutableListOf<Int>()
+        val out = IntArray(intcode.size + 2)
+        var curr = 0
         while (ip < intcode.size - 1) {
             val ins = intcode[ip]
             val op = intcode[ip + 1]
@@ -55,7 +113,11 @@ object Day17 : Day(17) {
 
                 5 -> {
                     //println("sout *$op")
-                    out += (combo % 8).toInt()
+                    if (curr !in out.indices) {
+                        break
+                    }
+                    out[curr] = (combo % 8).toInt()
+                    curr++
                 }
 
                 6 -> {
@@ -70,6 +132,6 @@ object Day17 : Day(17) {
             }
             ip += 2
         }
-        return out
+        return out.take(curr)
     }
 }
